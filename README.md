@@ -2,6 +2,20 @@
 
 A new Flutter project.
 
+Done
+- [Basic] Hacker news
+- [Todo] https://flutterx.com/
+- [Todo] medium https://medium.com/flutter-community
+- [Todo] https://fireship.io/tags/flutter/
+- [Todo] https://www.toptal.com/flutter/flutter-tutorial
+
+Video
+- [Todo] https://developers.google.com/events/flutter-live/
+- [Todo] youtube channel
+
+Complete project
+- [Todo] https://itsallwidgets.com/
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
