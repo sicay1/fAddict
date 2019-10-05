@@ -1,7 +1,7 @@
 import 'package:http/http.dart';
 import 'package:html/parser.dart';
 import 'package:html/dom.dart';
-import 'models/article.dart';
+import 'package:test_hl/models/article.dart';
 
 Future<List<ArticleModel>> initHackerNews() async {
   var cl = Client();
@@ -24,6 +24,7 @@ Future<List<ArticleModel>> initHackerNews() async {
   List<ArticleModel> linkMap = [];
   for (int i = 0; i < links1.length; i++) {
     linkMap.add(new ArticleModel(
+      source: 'Hacker News',
       title: links1[i].text,
       url: links1[i].attributes['href'],
       point: links2[i].querySelector('span.score')?.text ?? "",
