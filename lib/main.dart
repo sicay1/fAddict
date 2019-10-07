@@ -14,22 +14,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   List<ArticleModel> allArticle = [];
-  // List<ArticleModel> allArticlexx = [];
-  // Future crawlMedium() async {
-  //   allArticlexx.addAll(await getMediumPost());
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   crawlMedium();
-  // }
 
   Future<List<ArticleModel>> getArticleFromAllSource() async {
     // allArticle.addAll(await initHackerNews());
     allArticle.addAll(await getMediumPost());
 
-    // allArticle.shuffle();
+    allArticle.shuffle();
     return allArticle;
   }
 
@@ -110,15 +100,7 @@ class _MyAppState extends State<MyApp> {
                             //button actions
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                              // IconButton(
-                              //   icon: Icon(Icons.open_in_new),
-                              //   tooltip: "click to read this",
-                              //   iconSize: 30,
-                              //   color: Colors.blue,
-                              //   highlightColor: Colors.redAccent,
-                              //   onPressed: () {},
-                              // ),
-                              IconButton(
+                               IconButton(
                                 icon: Icon(Icons.save_alt),
                                 tooltip: "Save to local for offline read",
                                 iconSize: 30,
