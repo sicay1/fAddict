@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
+import 'package:test_hl/crawlers/medium.dart';
 import 'crawlers/hacker_news.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'models/article.dart';
@@ -10,6 +12,147 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
+class _MyAppState extends State<MyApp> {
+  List<ArticleModel> allArticle = [];
+  // List<ArticleModel> allArticlexx = [];
+  // Future crawlMedium() async {
+  //   allArticlexx.addAll(await getMediumPost());
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   crawlMedium();
+  // }
+
+  Future<List<ArticleModel>> getArticleFromAllSource() async {
+    // allArticle.addAll(await initHackerNews());
+    allArticle.addAll(await getMediumPost());
+
+    // allArticle.shuffle();
+    return allArticle;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: Scaffold(
+        appBar: new AppBar(),
+        body: FutureBuilder(
+          builder: (context, projectSnap) {
+            if (projectSnap.connectionState == ConnectionState.none &&
+                    projectSnap.hasData == null ||
+                projectSnap.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return ListView.builder(
+              itemCount: projectSnap.data.length,
+              itemBuilder: (context, index) {
+                ArticleModel allarticle = projectSnap.data[index];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.only(bottomLeft: Radius.circular(20))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: new Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(allarticle.source,
+                              style: TextStyle(color: Colors.grey)),
+                          Container(
+                            child: InkWell(
+                              child: Text(allarticle.title,
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blueAccent)),
+                              onTap: () {
+                                print('tapped url ${allarticle.url}');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SecondRoute(allarticle.url)),
+                                );
+                              },
+                            ),
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Icon(Icons.person,
+                                  color: Colors.grey.withOpacity(0.5)),
+                              SizedBox(width: 5),
+                              Text(allarticle.user),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Icon(Icons.trending_up,
+                                  color: Colors.grey.withOpacity(0.5)),
+                              SizedBox(width: 5),
+                              Text(allarticle.point),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Icon(Icons.comment,
+                                  color: Colors.grey.withOpacity(0.5)),
+                              SizedBox(width: 5),
+                              Text(allarticle.commend),
+                            ],
+                          ),
+                          Row(
+                            //button actions
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              // IconButton(
+                              //   icon: Icon(Icons.open_in_new),
+                              //   tooltip: "click to read this",
+                              //   iconSize: 30,
+                              //   color: Colors.blue,
+                              //   highlightColor: Colors.redAccent,
+                              //   onPressed: () {},
+                              // ),
+                              IconButton(
+                                icon: Icon(Icons.save_alt),
+                                tooltip: "Save to local for offline read",
+                                iconSize: 30,
+                                color: Colors.grey,
+                                onPressed: () {},
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.share),
+                                tooltip: "Share friends",
+                                iconSize: 30,
+                                color: Colors.blue,
+                                onPressed: () {
+                                  Share.share(
+                                      'this article so good ${allarticle.url}');
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+          future: getArticleFromAllSource(),
+        ),
+      ),
+    );
+  }
+}
+
+//Webview page
 class SecondRoute extends StatefulWidget {
   final String url;
 
@@ -49,115 +192,6 @@ class _SecondRouteState extends State<SecondRoute> {
             child: Center(child: CircularProgressIndicator()),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _MyAppState extends State<MyApp> {
-  List<ArticleModel> allArticle = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: Scaffold(
-        appBar: new AppBar(),
-        body: FutureBuilder(
-          builder: (context, projectSnap) {
-            if (projectSnap.connectionState == ConnectionState.none &&
-                    projectSnap.hasData == null ||
-                projectSnap.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            return ListView.builder(
-              itemCount: projectSnap.data.length,
-              itemBuilder: (context, index) {
-                ArticleModel allarticle = projectSnap.data[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.only(bottomLeft: Radius.circular(20))),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: new Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text('hacker news',
-                              style: TextStyle(color: Colors.grey)),
-                          Text(allarticle.title,
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold)),
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.person,
-                                  color: Colors.grey.withOpacity(0.5)),
-                              Text(allarticle.user),
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.score,
-                                  color: Colors.grey.withOpacity(0.5)),
-                              Text(allarticle.point),
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Icon(Icons.comment,
-                                  color: Colors.grey.withOpacity(0.5)),
-                              Text(allarticle.commend),
-                            ],
-                          ),
-                          Row(
-                            //button actions
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              IconButton(
-                                icon: Icon(Icons.open_in_new),
-                                tooltip: "click to read this",
-                                iconSize: 30,
-                                color: Colors.blue,
-                                highlightColor: Colors.redAccent,
-                                onPressed: () {
-                                  print('tapped url ${allarticle.url}');
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            SecondRoute(allarticle.url)),
-                                  );
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.save_alt),
-                                tooltip: "Save to local for offline read",
-                                iconSize: 30,
-                                color: Colors.blue,
-                                onPressed: () {},
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.share),
-                                tooltip: "Share friends",
-                                iconSize: 30,
-                                color: Colors.blue,
-                                onPressed: () {},
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-          future: initHackerNews(),
-        ),
       ),
     );
   }

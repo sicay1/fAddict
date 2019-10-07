@@ -7,16 +7,6 @@ Future<List<ArticleModel>> initHackerNews() async {
   var cl = Client();
   Response resp = await cl.get('https://news.ycombinator.com');
 
-  // var doc = parse(resp.body);
-  // List<Element> links = doc.querySelectorAll('td.title > a.storylink');
-  // List<Map<String, dynamic>> linkMap = [];
-
-  // for(var link in links){
-  //   linkMap.add({
-  //     'title' : link.text,
-  //     'href' : link.attributes['href'],
-  //   });
-  // }
 
   var doc = parse(resp.body);
   List<Element> links1 = doc.querySelectorAll('td.title > a.storylink');
@@ -25,8 +15,8 @@ Future<List<ArticleModel>> initHackerNews() async {
   for (int i = 0; i < links1.length; i++) {
     linkMap.add(new ArticleModel(
       source: 'Hacker News',
-      title: links1[i].text,
-      url: links1[i].attributes['href'],
+      title: links1[i].text ?? "",
+      url: links1[i].attributes['href'] ?? "",
       point: links2[i].querySelector('span.score')?.text ?? "",
       age: links2[i].querySelector('span.age')?.text ?? "",
       commend: links2[i].querySelectorAll('a').last?.text ?? "",
