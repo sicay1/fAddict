@@ -19,7 +19,7 @@ Future<List<ArticleModel>> getMediumPost() async {
   var allMediumPosts = mData.references.post;
   for (PortoCamel post in allMediumPosts.values) {
     linkMap.add(new ArticleModel(
-      source: 'Medium - Flutter Community',
+      source: 'Medium',
       title: post.title ?? "",
       url: 'https://medium.com/p/${post.id ?? '404'}',
       point: post.virtuals.totalClapCount.toString(),

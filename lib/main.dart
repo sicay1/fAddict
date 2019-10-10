@@ -3,6 +3,7 @@ import 'package:share/share.dart';
 import 'package:test_hl/crawlers/medium.dart';
 import 'crawlers/hacker_news.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'crawlers/reddit.dart';
 import 'models/article.dart';
 
 void main() => runApp(MyApp());
@@ -17,8 +18,8 @@ class _MyAppState extends State<MyApp> {
 
   Future<List<ArticleModel>> getArticleFromAllSource() async {
     // allArticle.addAll(await initHackerNews());
-    allArticle.addAll(await getMediumPost());
-
+    allArticle.addAll(await getRedditPost());
+    // allArticle.addAll(await getMediumPost());
     allArticle.shuffle();
     return allArticle;
   }
@@ -26,7 +27,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      // title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: Scaffold(
         appBar: new AppBar(),
@@ -66,8 +67,10 @@ class _MyAppState extends State<MyApp> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          SecondRoute(allarticle.url)),
+                                      builder: (context) => SecondRoute(
+                                          allarticle.url,
+                                          allarticle.source,
+                                          allarticle.source)),
                                 );
                               },
                             ),
@@ -100,7 +103,7 @@ class _MyAppState extends State<MyApp> {
                             //button actions
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                               IconButton(
+                              IconButton(
                                 icon: Icon(Icons.save_alt),
                                 tooltip: "Save to local for offline read",
                                 iconSize: 30,
@@ -136,9 +139,11 @@ class _MyAppState extends State<MyApp> {
 
 //Webview page
 class SecondRoute extends StatefulWidget {
+  final String titleTxt;
   final String url;
+  final String source;
 
-  const SecondRoute(this.url);
+  const SecondRoute(this.url, this.titleTxt, this.source);
 
   @override
   _SecondRouteState createState() => _SecondRouteState();
@@ -155,8 +160,18 @@ class _SecondRouteState extends State<SecondRoute> {
 
   @override
   Widget build(BuildContext context) {
+    bool jsEnable;
+    switch (widget.source) {
+      case 'Medium':
+        jsEnable = false;
+        break;
+      case 'Reddit':
+        jsEnable = true;
+        break;
+    }
+
     return Scaffold(
-      appBar: AppBar(title: Text("Second Route")),
+      appBar: AppBar(title: Center(child: Text(widget.titleTxt))),
       body: IndexedStack(
         index: _stackToView,
         children: <Widget>[
@@ -165,7 +180,9 @@ class _SecondRouteState extends State<SecondRoute> {
               key: _key,
               initialUrl: widget.url,
               onPageFinished: _handleLoad,
-              javascriptMode: JavascriptMode.disabled,
+              javascriptMode: jsEnable ? JavascriptMode.unrestricted: JavascriptMode.disabled,
+              // javascriptMode: JavascriptMode.unrestricted,
+              // javascriptChannels: ,
               userAgent:
                   "Mozilla/5.0 (Linux; U; Android 8.1.0; en-US; Nexus 6P Build/OPM7.181205.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.108 UCBrowser/12.11.1.1197 Mobile Safari/537.36",
             ),

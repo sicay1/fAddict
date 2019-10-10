@@ -10,9 +10,15 @@
 - [ ] Github search https://github.com/search?l=Dart&p=2&q=var+safeWidth+%3D+width+-+2+%2A+padding%3B+++++++++var+safeHeight+%3D+height+-+2+%2A+padding%3B&type=Code
 - [ ] https://fluttercentral.com/
 - [ ] https://gitter.im/flutter/flutter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+- [ ] https://steemit.com/trending/gaming
+- [x] https://www.reddit.com/r/FlutterDev/
+- [x] https://www.reddit.com/r/Flutter/ - similar to FlutterDev  u/ = User; r/ = Subreddit
+
+
 ## UI
 - [ ] Offline read
 - [x] Share
+
 
 ## Video
 - [Todo] https://developers.google.com/events/flutter-live/
