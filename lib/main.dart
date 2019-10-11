@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
-import 'package:test_hl/crawlers/medium.dart';
-import 'crawlers/hacker_news.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'crawlers/reddit.dart';
-import 'models/article.dart';
+//crawlers
+import 'DAL/db_helper.dart';
+import 'crawlers/reddit_crawler.dart';
+import 'crawlers/medium_crawler.dart';
+import 'crawlers/hacker_news.dart';
+//models
+import 'models/article_model.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,12 +18,22 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   List<ArticleModel> allArticle = [];
+  var db = new DatabaseHelper();
 
   Future<List<ArticleModel>> getArticleFromAllSource() async {
+    // db.clearTable();
+    allArticle = await db.getArticle();
+    if (allArticle.length == 0) {
+      allArticle.addAll(await getMediumPost());
+      // allArticle.shuffle();
+
+      for (var a in allArticle) {
+        db.saveArticle(a);
+      }
+    }
     // allArticle.addAll(await initHackerNews());
-    allArticle.addAll(await getRedditPost());
-    // allArticle.addAll(await getMediumPost());
-    allArticle.shuffle();
+    // allArticle.addAll(await getRedditPost());
+
     return allArticle;
   }
 
@@ -30,7 +43,10 @@ class _MyAppState extends State<MyApp> {
       // title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: Scaffold(
-        appBar: new AppBar(),
+        appBar: new AppBar(
+          centerTitle: true,
+          title: Text('f addict reader'),
+        ),
         body: FutureBuilder(
           builder: (context, projectSnap) {
             if (projectSnap.connectionState == ConnectionState.none &&
@@ -103,6 +119,19 @@ class _MyAppState extends State<MyApp> {
                             //button actions
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
+                              allarticle.status == 3
+                                  ? Icon(Icons.save, color: Colors.blueAccent)
+                                  : IconButton(
+                                      icon: Icon(Icons.add_location),
+                                      tooltip: "Read later",
+                                      iconSize: 30,
+                                      color: Colors.grey,
+                                      onPressed: () {
+                                        allarticle.status = 3;
+                                        db.update(allarticle);
+                                        setState(() {});
+                                      },
+                                    ),
                               IconButton(
                                 icon: Icon(Icons.save_alt),
                                 tooltip: "Save to local for offline read",
@@ -180,7 +209,9 @@ class _SecondRouteState extends State<SecondRoute> {
               key: _key,
               initialUrl: widget.url,
               onPageFinished: _handleLoad,
-              javascriptMode: jsEnable ? JavascriptMode.unrestricted: JavascriptMode.disabled,
+              javascriptMode: jsEnable
+                  ? JavascriptMode.unrestricted
+                  : JavascriptMode.disabled,
               // javascriptMode: JavascriptMode.unrestricted,
               // javascriptChannels: ,
               userAgent:

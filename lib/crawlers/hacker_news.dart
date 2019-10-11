@@ -1,7 +1,7 @@
 import 'package:http/http.dart';
 import 'package:html/parser.dart';
 import 'package:html/dom.dart';
-import 'package:test_hl/models/article.dart';
+import 'package:test_hl/models/article_model.dart';
 
 Future<List<ArticleModel>> initHackerNews() async {
   var cl = Client();
