@@ -1,4 +1,4 @@
-# Fxxking Addict ...... Reader
+# Flutter Addict
 
 ## Crawler
 - [x] Hacker news
