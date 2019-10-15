@@ -2,8 +2,11 @@
 
 ## Crawler
 - [x] Hacker news
+- [x] [SubReddit FlutterDev](https://www.reddit.com/r/FlutterDev/)
+- [x] [SubReddit Flutter](https://www.reddit.com/r/Flutter/) - similar to FlutterDev  u/ = User; r/ = Subreddit
+- [x] [medium](https://medium.com/flutter-community)
+
 - [ ]  https://flutterx.com/
-- [x] medium https://medium.com/flutter-community
 - [ ] https://fireship.io/tags/flutter/
 - [ ] https://www.toptal.com/flutter/flutter-tutorial
 - [ ] Hackernoon https://hackernoon.com/how-i-learned-flutter-and-how-you-can-toounlike-any-other-flutter-article-toai230ku
@@ -11,9 +14,7 @@
 - [ ] https://fluttercentral.com/
 - [ ] https://gitter.im/flutter/flutter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 - [ ] https://steemit.com/trending/gaming
-- [x] https://www.reddit.com/r/FlutterDev/
-- [x] https://www.reddit.com/r/Flutter/ - similar to FlutterDev  u/ = User; r/ = Subreddit
-
+- [ ] [Dev.to Flutter](https://dev.to/t/flutter/latest)
 
 ## UI
 - [ ] Offline read

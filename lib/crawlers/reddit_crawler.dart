@@ -6,9 +6,7 @@ import 'package:test_hl/models/reddit_model.dart';
 // import 'package:test_hl/models/medium_model.dart';
 
 Future<List<ArticleModel>> getRedditPost() async {
-  var cl = Client();
-  Response resp = await cl.get('https://www.reddit.com/r/FlutterDev/');
-
+  Response resp = await Client().get('https://www.reddit.com/r/FlutterDev/');
   var doc = parse(resp.body).querySelector('body');
 
   RegExp regExp = new RegExp(r'{"domain":(.*?)"numDuplicates":.*?}',

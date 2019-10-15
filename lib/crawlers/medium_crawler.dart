@@ -5,9 +5,7 @@ import 'package:test_hl/models/article_model.dart';
 import 'package:test_hl/models/medium_model.dart';
 
 Future<List<ArticleModel>> getMediumPost() async {
-  var cl = Client();
-  Response resp = await cl.get('https://medium.com/flutter-community');
-
+  Response resp = await Client().get('https://medium.com/flutter-community');
   var doc = parse(resp.body).querySelector('body');
 
   RegExp regExp = new RegExp(r'{"references"(.*.?)\]\}',
