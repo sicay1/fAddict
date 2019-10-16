@@ -1,4 +1,4 @@
-package com.example.test_hl
+package xyz.ucode.faddict
 
 import android.os.Bundle
 

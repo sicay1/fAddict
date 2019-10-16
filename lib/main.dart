@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
+//Webview
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 //crawlers
 import 'DAL/db_helper.dart';
 import 'crawlers/reddit_crawler.dart';
@@ -25,15 +27,15 @@ class _MyAppState extends State<MyApp> {
     allArticle = await db.getArticle();
     if (allArticle.length == 0) {
       allArticle.addAll(await getMediumPost());
-      // allArticle.shuffle();
+      allArticle.addAll(await getRedditPost());
+      // allArticle.addAll(await initHackerNews());
+      allArticle.shuffle();
 
       for (var a in allArticle) {
         db.saveArticle(a);
       }
     }
-    // allArticle.addAll(await initHackerNews());
-    // allArticle.addAll(await getRedditPost());
-
+    
     return allArticle;
   }
 
@@ -199,29 +201,49 @@ class _SecondRouteState extends State<SecondRoute> {
         break;
     }
 
-    return Scaffold(
-      appBar: AppBar(title: Center(child: Text(widget.titleTxt))),
-      body: IndexedStack(
-        index: _stackToView,
-        children: <Widget>[
-          SafeArea(
-            child: WebView(
-              key: _key,
-              initialUrl: widget.url,
-              onPageFinished: _handleLoad,
-              javascriptMode: jsEnable
-                  ? JavascriptMode.unrestricted
-                  : JavascriptMode.disabled,
-              // javascriptMode: JavascriptMode.unrestricted,
-              // javascriptChannels: ,
-              userAgent:
-                  "Mozilla/5.0 (Linux; U; Android 8.1.0; en-US; Nexus 6P Build/OPM7.181205.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.108 UCBrowser/12.11.1.1197 Mobile Safari/537.36",
-            ),
-          ),
-          Container(
-            child: Center(child: CircularProgressIndicator()),
-          ),
-        ],
+    // return Scaffold(
+    //   appBar: AppBar(title: Center(child: Text(widget.titleTxt))),
+    //   body: IndexedStack(
+    //     index: _stackToView,
+    //     children: <Widget>[
+    //       SafeArea(
+    //         child: WebView(
+    //           key: _key,
+    //           initialUrl: widget.url,
+    //           onPageFinished: _handleLoad,
+    //           javascriptMode: jsEnable
+    //               ? JavascriptMode.unrestricted
+    //               : JavascriptMode.disabled,
+    //           // javascriptMode: JavascriptMode.unrestricted,
+    //           // javascriptChannels: ,
+    //           userAgent:
+    //               "Mozilla/5.0 (Linux; U; Android 8.1.0; en-US; Nexus 6P Build/OPM7.181205.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.108 UCBrowser/12.11.1.1197 Mobile Safari/537.36",
+    //         ),
+    //       ),
+    //       Container(
+    //         child: Center(child: CircularProgressIndicator()),
+    //       ),
+    //     ],
+    //   ),
+    // );
+
+    return WebviewScaffold(
+      url: widget.url,
+      appCacheEnabled: true,
+      primary: true,
+      withJavascript: false,
+      appBar: new AppBar(
+        centerTitle: true,
+        title: Text(widget.titleTxt),
+      ),
+      withZoom: true,
+      withLocalStorage: true,
+      hidden: true,
+      initialChild: Container(
+        // color: Colors.redAccent,
+        child: const Center(
+          child: Text('Fetching Data.....'),
+        ),
       ),
     );
   }

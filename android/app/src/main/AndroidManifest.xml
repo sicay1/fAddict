@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.test_hl">
+    package="xyz.ucode.faddict">
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -10,7 +10,7 @@
         android:usesCleartextTraffic="true"
 
         android:name="io.flutter.app.FlutterApplication"
-        android:label="test_hl"
+        android:label="fAddict"
 
         android:icon="@mipmap/launcher_icon">
         <activity
